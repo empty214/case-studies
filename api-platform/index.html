@@ -56,6 +56,7 @@ ul.tick li::before { content: "\2713"; position: absolute; left: 0; color: var(-
 .diagram text.s { fill: var(--muted); font-weight: 400; font-size: 12px; }
 .diagram path { stroke: var(--muted); stroke-width: 1.8; fill: none; }
 .diagram polygon { fill: var(--muted); }
+.shots { display: grid; gap: 22px; }
 .terms { color: var(--muted); font-size: .9rem; }
 footer { padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
 @media print {
@@ -81,6 +82,8 @@ footer { padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--m
   .icons img { width: 34px; height: 34px; }
   .card { padding: 8px 10px; }
   .terms { font-size: .9rem; }
+  .shots { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .shots .fig figcaption { font-size: .8rem; }
   .noprint { display: none; }
   footer { padding: 8px 0 0; font-size: .9rem; }
 }
@@ -129,10 +132,16 @@ footer { padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--m
 
 <section>
   <h2>What it looks like</h2>
-  <figure class="fig">
-    <img src="img/settings.webp" alt="Per-product settings: sync switch, interval in seconds, last synced time and a diagnostics toggle" width="1491" height="196">
-    <figcaption>Per-product settings, with client names removed: the sync switch, the interval, the last sync and the diagnostics toggle.</figcaption>
-  </figure>
+  <div class="shots">
+    <figure class="fig">
+      <img src="img/event-log.webp" alt="Event log with tabs for sync activity, settings changes and application errors, summary cards and a filterable table" width="1912" height="914">
+      <figcaption>The event log: every sync, filterable, with separate tabs for settings changes and errors. Payloads are captured only while diagnostics mode is on for a product. Names and counts are blurred.</figcaption>
+    </figure>
+    <figure class="fig">
+      <img src="img/settings.webp" alt="Settings screen with a global polling interval and a sync schedule, switch and diagnostics toggle for each product" width="1912" height="914">
+      <figcaption>Settings: a global polling interval, and for each product its own sync schedule, on/off switch and diagnostics toggle. Names are blurred.</figcaption>
+    </figure>
+  </div>
 </section>
 
 <section>
