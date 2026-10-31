@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI pipelines that run real work, with a person approving every output</title>
 <meta name="description" content="Case study: six production AI pipelines for project management and operations: meeting transcripts to tracked actions, candidate screening, weekly reports, digests, a chatbot and job sourcing. A person approves every output.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI pipelines that run real work, with a person approving every output">
+<meta property="og:description" content="Six production AI pipelines: meeting follow-up, candidate screening, weekly reports, digests, a chatbot and job sourcing. A person approves every output.">
+<meta property="og:image" content="https://empty214.github.io/case-studies/ai-pipelines/share.png">
+<meta property="og:url" content="https://empty214.github.io/case-studies/ai-pipelines/">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root {
   --bg: #fbfbf9; --fg: #16181d; --muted: #565c6b; --card: #ffffff; --line: #e1e4ea;
@@ -66,6 +72,9 @@ footer { padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--m
 .stats4 .n { font-size: 1.7rem; white-space: nowrap; }
 ul.plain { margin: 8px 0 0; padding-left: 20px; }
 ul.plain li { margin-bottom: 8px; }
+figure.shot { margin: 18px 0 0; break-inside: avoid; }
+figure.shot img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 10px; }
+figure.shot figcaption { color: var(--muted); font-size: .88rem; margin-top: 8px; }
 @media print {
   :root { --bg: #fff; --fg: #111; --muted: #444; --card: #fff; --line: #ccc; --soft: #f3f5fb; --accent: #1f3fb0; --ok: #1e7a45; }
   @page { size: A4; margin: 12mm; }
@@ -168,6 +177,48 @@ ul.plain li { margin-bottom: 8px; }
 </section>
 
 <section>
+  <h2>The talent pipeline, step by step</h2>
+  <p>Built as a development pipeline, not a filter. Nobody is ghosted: every applicant gets a reply, a score and specific advice, and can come back. Each round shows who is most motivated and who is most skilled.</p>
+  <svg class="diagram" viewBox="0 0 760 330" role="img" aria-label="Application in, evaluated against set criteria, personal feedback, candidate resubmits, evaluated again, reply and engagement, all feeding continuous improvement.">
+    <rect x="10" y="20" width="220" height="70" rx="10"/>
+    <text x="120" y="50" text-anchor="middle">Application in</text>
+    <text class="s" x="120" y="72" text-anchor="middle">arrives by email</text>
+    <rect class="hi" x="270" y="20" width="220" height="70" rx="10"/>
+    <text x="380" y="50" text-anchor="middle">Evaluated</text>
+    <text class="s" x="380" y="72" text-anchor="middle">against set criteria</text>
+    <rect x="530" y="20" width="220" height="70" rx="10"/>
+    <text x="640" y="50" text-anchor="middle">Personal feedback</text>
+    <text class="s" x="640" y="72" text-anchor="middle">specific advice to improve</text>
+    <rect x="530" y="140" width="220" height="70" rx="10"/>
+    <text x="640" y="170" text-anchor="middle">Candidate resubmits</text>
+    <text class="s" x="640" y="192" text-anchor="middle">when they have improved</text>
+    <rect class="hi" x="270" y="140" width="220" height="70" rx="10"/>
+    <text x="380" y="170" text-anchor="middle">Evaluated again</text>
+    <text class="s" x="380" y="192" text-anchor="middle">scored on the new work</text>
+    <rect x="10" y="140" width="220" height="70" rx="10"/>
+    <text x="120" y="170" text-anchor="middle">Reply and engagement</text>
+    <text class="s" x="120" y="192" text-anchor="middle">next step, never ghosted</text>
+    <rect class="hi" x="10" y="250" width="740" height="64" rx="10"/>
+    <text x="380" y="278" text-anchor="middle">Continuous improvement</text>
+    <text class="s" x="380" y="299" text-anchor="middle">The ones who keep improving show who is most motivated and most skilled.</text>
+    <path d="M230 55 H270 M490 55 H530 M640 90 V140 M530 175 H490 M270 175 H230"/>
+    <polygon points="270,55 260,50 260,60"/><polygon points="530,55 520,50 520,60"/><polygon points="640,140 635,130 645,130"/><polygon points="490,175 500,170 500,180"/><polygon points="230,175 240,170 240,180"/>
+  </svg>
+</section>
+
+<section>
+  <h2>What it looks like</h2>
+  <figure class="shot">
+    <img src="img/action-review.webp" alt="The action point approval screen: a list of new and existing actions with owner, project and priority, and an Approve and Publish to Planner button." width="1400" height="507" loading="lazy">
+    <figcaption>The approval screen for meeting action points. Every action is listed with owner, project and priority, and nothing is published to Planner until a person approves it. Names and details are blurred.</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="img/digest.webp" alt="The top of the daily digest: counts for urgent tasks, blocked work, drafts waiting and strong candidates." width="966" height="84" loading="lazy">
+    <figcaption>The top of the daily digest: urgent work, blocked work, drafts waiting and strong candidates at a glance. The rest of the digest is not shown.</figcaption>
+  </figure>
+</section>
+
+<section>
   <h2>How they work</h2>
   <svg class="diagram" viewBox="0 0 760 130" role="img" aria-label="Inputs such as meetings, emails, postings and project records go into the pipelines, a person approves, and the outputs are tasks, replies, reports and answers.">
     <rect x="10" y="25" width="165" height="80" rx="10"/>
@@ -208,7 +259,7 @@ ul.plain li { margin-bottom: 8px; }
 <footer>
   <p><strong>Mark Tenzer</strong>, technical project manager and integration specialist. <a href="https://www.linkedin.com/in/mark-tenzer-2466289/">LinkedIn</a></p>
   <p class="noprint"><a href="ai-pipelines-case-study.pdf">Download this case study as a PDF</a> | <a href="../">All case studies</a></p>
-  <p>Case study v0.1, 1 November 2026. Names and branding removed. No tracking and no outside scripts.</p>
+  <p>Case study v0.2, 1 November 2026. Names and branding removed. No tracking and no outside scripts.</p>
 </footer>
 
 </div>
