@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API integration platform: from one HR integration to a GDPR-compliant hub</title>
+<meta name="description" content="Case study: one HR-to-school-system integration, designed from scratch, became a GDPR-compliant API platform that connects multiple products and clients and holds no personal data itself.">
+<style>
+:root {
+  --bg: #fbfbf9; --fg: #16181d; --muted: #565c6b; --card: #ffffff; --line: #e1e4ea;
+  --accent: #2f5bea; --soft: #eef2ff; --ok: #1e8a4c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115; --fg: #eceef3; --muted: #a3a9b8; --card: #171a21; --line: #2a2f3a;
+    --accent: #8ea8ff; --soft: #1b2033; --ok: #5ccf8f;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-text-size-adjust: 100%; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 0 16px; }
+header { padding: 56px 0 32px; }
+section { padding: 32px 0; border-top: 1px solid var(--line); }
+.eyebrow { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+h1 { font-size: clamp(1.9rem, 5.5vw, 3rem); line-height: 1.12; margin: 0 0 16px; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.3rem, 3.5vw, 1.7rem); line-height: 1.2; margin: 0 0 12px; letter-spacing: -0.01em; }
+h3 { font-size: 1.02rem; margin: 0 0 6px; }
+p { margin: 0 0 14px; }
+.lead { font-size: 1.2rem; color: var(--muted); max-width: 660px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.pill { font-size: .88rem; padding: 6px 12px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.card p { margin: 0; color: var(--muted); font-size: .96rem; }
+.stats { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 16px; }
+.stat { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.stat .n { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.stat .l { color: var(--muted); font-size: .94rem; margin-top: 4px; }
+.cols { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr) 280px; align-items: start; }
+@media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+.fig { margin: 0; }
+.fig img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); }
+.fig figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; }
+.icons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.icons img { width: 64px; height: 64px; border-radius: 50%; }
+ul.tick { list-style: none; padding: 0; margin: 8px 0 0; }
+ul.tick li { padding-left: 26px; position: relative; margin-bottom: 8px; }
+ul.tick li::before { content: "\2713"; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
+.diagram { width: 100%; height: auto; margin-top: 12px; }
+.diagram rect { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+.diagram rect.hi { fill: var(--soft); stroke: var(--accent); }
+.diagram text { fill: var(--fg); font: 600 14px system-ui, sans-serif; }
+.diagram text.s { fill: var(--muted); font-weight: 400; font-size: 12px; }
+.diagram path { stroke: var(--muted); stroke-width: 1.8; fill: none; }
+.diagram polygon { fill: var(--muted); }
+.terms { color: var(--muted); font-size: .9rem; }
+footer { padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+@media print {
+  :root { --bg: #fff; --fg: #111; --muted: #444; --card: #fff; --line: #ccc; --soft: #f3f5fb; --accent: #1f3fb0; --ok: #1e7a45; }
+  @page { size: A4; margin: 12mm; }
+  html { font-size: 10.5px; }
+  body { font-size: 1rem; line-height: 1.42; }
+  .wrap { max-width: none; padding: 0; }
+  header { padding: 0 0 6px; }
+  section { padding: 9px 0; break-inside: avoid; }
+  h1 { font-size: 2.1rem; margin-bottom: 6px; }
+  h2 { font-size: 1.3rem; margin-bottom: 5px; }
+  h3 { font-size: 1.05rem; }
+  .lead { font-size: 1.15rem; }
+  .pills { margin-top: 8px; }
+  .pill { font-size: .85rem; padding: 4px 10px; }
+  .grid, .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+  .card p { font-size: .95rem; }
+  .stat { padding: 8px 10px; }
+  .stat .n { font-size: 1.6rem; }
+  .stat .l { font-size: .9rem; }
+  .cols { grid-template-columns: minmax(0, 1fr) 150px; gap: 14px; }
+  .icons img { width: 34px; height: 34px; }
+  .card { padding: 8px 10px; }
+  .terms { font-size: .9rem; }
+  .noprint { display: none; }
+  footer { padding: 8px 0 0; font-size: .9rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Case study</div>
+  <h1>From one HR integration to a reusable API platform</h1>
+  <p class="lead">An HR system that could not talk to the school's records system. One integration, designed from scratch, became a GDPR-compliant platform that connects multiple products and clients and holds no personal data itself.</p>
+  <div class="pills">
+    <span class="pill">My role: product and project owner</span>
+    <span class="pill">Two years from first build to go-live</span>
+    <span class="pill">Holds no personal data</span>
+    <span class="pill">Multiple products and clients</span>
+  </div>
+</header>
+
+<section>
+  <h2>The problem</h2>
+  <p>A school bought an HR system that does not connect to its school management system out of the box. The HR system is the source of truth for staff, and the school management system needs the same records. The two had to be kept in step, safely, with personal data involved.</p>
+</section>
+
+<section>
+  <h2>What I did</h2>
+  <p>I designed the integration from scratch and owned it end to end: the product, the project, the requirements, the testing and the rollout. Developers built it. Near the end I fixed bugs and fine-tuned it myself with Claude Code.</p>
+</section>
+
+<section>
+  <h2>How one integration became a platform</h2>
+  <p>It started as a minimum viable version for one HR system. Each need that followed, whether another system, another client or another product, went onto the same base instead of a new build, until it was a hub.</p>
+  <div class="grid">
+    <div class="card"><h3>Two-way sync, per direction</h3><p>Each direction can be switched on or off, with the HR system as the source of truth.</p></div>
+    <div class="card"><h3>A schedule per product</h3><p>Set by the person who owns that system, and changed without a developer.</p></div>
+    <div class="card"><h3>Tools for troubleshooting</h3><p>Every record visible and syncable by hand, live error messages, and a filterable event viewer.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Built to hold no data</h2>
+  <p>The platform is GDPR-compliant by design. Records pass through it and it keeps none: nothing personal is stored in its database or web app. When something goes wrong, diagnostics can be switched on for one product to capture what is needed to find the cause. Switched off, all personal data is purged.</p>
+  <p>Support gets the visibility it needs, and the school does not gain a second copy of its people data.</p>
+</section>
+
+<section>
+  <h2>What it looks like</h2>
+  <figure class="fig">
+    <img src="img/settings.webp" alt="Per-product settings: sync switch, interval in seconds, last synced time and a diagnostics toggle" width="1491" height="196">
+    <figcaption>Per-product settings, with client names removed: the sync switch, the interval, the last sync and the diagnostics toggle.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <svg class="diagram" viewBox="0 0 760 215" role="img" aria-label="The HR system and the school management system connect two-way through the integration platform, which offers a schedule per product, an event viewer, manual sync and a diagnostics switch.">
+    <rect x="10" y="20" width="150" height="70" rx="10"/>
+    <text x="85" y="52" text-anchor="middle">HR system</text>
+    <text class="s" x="85" y="72" text-anchor="middle">source of truth</text>
+    <rect class="hi" x="270" y="20" width="220" height="70" rx="10"/>
+    <text x="380" y="52" text-anchor="middle">Integration platform</text>
+    <text class="s" x="380" y="72" text-anchor="middle">passes data through, keeps none</text>
+    <rect x="600" y="20" width="150" height="70" rx="10"/>
+    <text x="675" y="52" text-anchor="middle">School system</text>
+    <text class="s" x="675" y="72" text-anchor="middle">school management</text>
+    <path d="M160 55 H270 M490 55 H600"/>
+    <polygon points="160,55 170,50 170,60"/><polygon points="270,55 260,50 260,60"/>
+    <polygon points="490,55 500,50 500,60"/><polygon points="600,55 590,50 590,60"/>
+    <rect x="20" y="140" width="150" height="58" rx="10"/>
+    <text x="95" y="166" text-anchor="middle">Schedule</text>
+    <text class="s" x="95" y="184" text-anchor="middle">per product</text>
+    <rect x="205" y="140" width="150" height="58" rx="10"/>
+    <text x="280" y="166" text-anchor="middle">Event viewer</text>
+    <text class="s" x="280" y="184" text-anchor="middle">filterable</text>
+    <rect x="390" y="140" width="150" height="58" rx="10"/>
+    <text x="465" y="166" text-anchor="middle">Manual sync</text>
+    <text class="s" x="465" y="184" text-anchor="middle">record by record</text>
+    <rect x="575" y="140" width="150" height="58" rx="10"/>
+    <text x="650" y="166" text-anchor="middle">Diagnostics</text>
+    <text class="s" x="650" y="184" text-anchor="middle">on only when needed</text>
+    <path d="M380 90 V118 M95 118 H650 M95 118 V134 M280 118 V134 M465 118 V134 M650 118 V134"/>
+    <polygon points="95,140 90,130 100,130"/><polygon points="280,140 275,130 285,130"/>
+    <polygon points="465,140 460,130 470,130"/><polygon points="650,140 645,130 655,130"/>
+  </svg>
+</section>
+
+<section>
+  <h2>The result</h2>
+  <div class="stats">
+    <div class="stat"><div class="n">2 products</div><div class="l">integrated at go-live</div></div>
+    <div class="stat"><div class="n">Multiple</div><div class="l">products and clients on the same platform since</div></div>
+    <div class="stat"><div class="n">None stored</div><div class="l">personal data held by the platform with diagnostics off</div></div>
+  </div>
+  <ul class="tick">
+    <li>One integration became a platform that is reusable and scalable across products and clients.</li>
+    <li>GDPR-compliant and brought to modern security standards, which the starting point was not.</li>
+    <li>Integrations built one after another since go-live, and fixed as they went.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What I would do differently</h2>
+  <p>The first version synced exactly what was specified: what is synced and where it lands. Nobody asked what happens when the data arrives. The old synchronization ran business rules after the sync, and that is not part of an API sync. That process knowledge was mine to supply, and I missed it. It showed at go-live, and the rules and reconciliation were rebuilt in the backend.</p>
+  <p>Today I start every migration the same way: full access to the old code on day one, a gap analysis of what the old system does, what the API can replicate and what must become backend logic, and a test system with a realistic copy of live data.</p>
+</section>
+
+<section>
+  <h2>Where it is now</h2>
+  <p>It is the base for new integrations across multiple clients and products.</p>
+  <p class="terms">Terms: API integration, system integration, HR system, school management system, two-way sync, Azure, GDPR, legacy modernization, integration architecture.</p>
+</section>
+
+<footer>
+  <p><strong>Mark Tenzer</strong>, technical project manager and integration specialist. <a href="https://www.linkedin.com/in/mark-tenzer-2466289/">LinkedIn</a></p>
+  <p class="noprint"><a href="api-integration-platform-case-study.pdf">Download this case study as a PDF</a> | <a href="../">All case studies</a></p>
+  <p>Case study v0.1, 31 October 2026. Names and branding removed. No tracking and no outside scripts.</p>
+</footer>
+
+</div>
+</body>
+</html>
